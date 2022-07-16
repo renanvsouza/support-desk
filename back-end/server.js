@@ -19,7 +19,6 @@ mongoose.connect(process.env.DB_CONNECTION)
 //Middleware
 
 app.use(express.json());
-app.use(errorHandler);
 
 //Routes
 
@@ -34,4 +33,6 @@ app.get('/', (req, res) => {
 app.get('*', (req, res) => {
     res.status(404).send('Not Found');
 })
+
+app.use(errorHandler);
 
