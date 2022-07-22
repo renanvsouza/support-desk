@@ -4,6 +4,13 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/userModel');
 
+//Generate token
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: '7d'
+    })
+}
+
 const registerUser = asyncHandler(async (req, res) => {
     const { email, username, password } = req.body;
     if (!username || !password) {
@@ -65,14 +72,19 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 })
 
-//Generate token
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: '7d'
-    })
-}
+const getMe = asyncHandler(async (req, res) => {
+    const user = {
+        id: req.user._id,
+        email: req.user.email,
+        username: req.user.username
+    }
+
+    res.status(200).json(user);
+})
+
 
 module.exports = {
     registerUser,
-    loginUser
+    loginUser,
+    getMe
 }
